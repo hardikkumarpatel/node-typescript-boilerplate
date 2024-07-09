@@ -1,0 +1,24 @@
+import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import { ApiAsyncHelper, ApiResponseHelper } from "@/helpers";
+import UserService from "@/api/user/User.service";
+import { IUser } from "@/api/user/User.defination";
+
+class UserController {
+  public static getUsers = ApiAsyncHelper.AsyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const users: IUser[] = await UserService.getUsersDetails();
+      res
+        .status(StatusCodes.OK)
+        .send(
+          new ApiResponseHelper<Record<string, IUser[]>>(
+            StatusCodes.OK,
+            "Users details fetch successfully",
+            { users }
+          )
+        );
+    }
+  );
+}
+
+export default UserController;

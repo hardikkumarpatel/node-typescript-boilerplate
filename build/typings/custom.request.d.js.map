@@ -1,0 +1,1 @@
+{"version":3,"file":"custom.request.d.js","names":[],"sources":["../../src/typings/custom.request.d.ts"],"sourcesContent":["export interface IRequestEntityParams {\n  event?: Event;\n  user?: User;\n}\n\ndeclare global {\n  namespace Express {\n    interface Request {\n      entity: IRequestEntityParams;\n    }\n  }\n}\n"],"mappings":"","ignoreList":[]}

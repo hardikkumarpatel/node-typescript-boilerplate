@@ -1,0 +1,1 @@
+{"version":3,"file":"global.d.js","names":[],"sources":["../../src/typings/global.d.ts"],"sourcesContent":["namespace NodeJS {\n  interface ProcessEnv {\n    NODE_ENV: string;\n    PORT: number;\n  }\n}\n"],"mappings":"","ignoreList":[]}
