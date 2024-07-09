@@ -1,4 +1,4 @@
-import swaggerOptions from "./Options.swagger";
-import SwaggerApp from "./Swagger.routes";
+import SwaggerOptions from "@/swagger/Options.swagger";
+import SwaggerApp from "@/swagger/Swagger.routes";
 
-export { swaggerOptions, SwaggerApp };
+export { SwaggerOptions, SwaggerApp };

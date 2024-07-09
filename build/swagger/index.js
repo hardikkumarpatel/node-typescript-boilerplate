@@ -9,7 +9,7 @@ Object.defineProperty(exports, "SwaggerApp", {
     return _Swagger.default;
   }
 });
-Object.defineProperty(exports, "swaggerOptions", {
+Object.defineProperty(exports, "SwaggerOptions", {
   enumerable: true,
   get: function get() {
     return _Options.default;

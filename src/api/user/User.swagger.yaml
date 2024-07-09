@@ -1,0 +1,14 @@
+tags:
+  - name: Users
+    description: The users management APIs
+paths:
+  /user/create:
+    get:
+      summary: Lists all the users
+      tags:
+        - Users
+      responses:
+        200:
+          description: The list of the users
+        401:
+          description: Unauthorized request! Access token is missing

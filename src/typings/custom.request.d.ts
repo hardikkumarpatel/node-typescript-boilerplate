@@ -1,6 +1,7 @@
+import { IUser } from "@/api/user/User.defination";
+
 export interface IRequestEntityParams {
-  event?: Event;
-  user?: User;
+  user?: IUser;
 }
 
 declare global {

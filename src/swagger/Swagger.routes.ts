@@ -2,9 +2,9 @@ import express from "express";
 import basicAuth from "express-basic-auth";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDocs from "swagger-jsdoc";
-import swaggerOptions from "@/swagger/Options.swagger";
 import { ApiAsyncHelper } from "@/helpers";
 import { Config, IConfigKey } from "@/config";
+import { SwaggerOptions } from "@/swagger";
 
 class SwaggerApp {
   public app: express.Application;
@@ -25,7 +25,7 @@ class SwaggerApp {
     this.app.use(
       "/docs",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerJSDocs(swaggerOptions), {
+      swaggerUi.setup(swaggerJSDocs(SwaggerOptions.SWAGGER_OPTIONS), {
         explorer: true,
         swaggerOptions: {
           docExpansion: "none"
@@ -36,7 +36,7 @@ class SwaggerApp {
       "/docs.json",
       ApiAsyncHelper.AsyncHandler(async (_, res) => {
         res.setHeader("Content-Type", "application/json");
-        res.send(swaggerJSDocs(swaggerOptions));
+        res.send(swaggerJSDocs(SwaggerOptions.SWAGGER_OPTIONS));
       })
     );
   }

@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 export default class ApiErrorHelperMiddleware {
-  public static useGlobalErrorMiddleware = <T = string>(
+  public static use = <T = string>(
     err: ApiErrorResponseHelper<T>,
     _: Request,
     res: Response,

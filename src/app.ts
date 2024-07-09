@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
@@ -35,14 +35,10 @@ class ExpressApp {
 
   private static async initialize(): Promise<void> {
     ExpressApp.initializeMiddleware();
+    ExpressApp.setupRequestMiddleware();
     ExpressApp.initializeRoutes();
     ExpressApp.initializeSwaggerDocs();
     ExpressApp.initializeGlobalMiddleware();
-  }
-
-  private static async initializeRoutes(): Promise<void> {
-    this.App.use("/health", AppHelper.useAppHealthRoute);
-    this.App.use(routes);
   }
 
   private static async initializeMiddleware(): Promise<void> {
@@ -60,6 +56,18 @@ class ExpressApp {
     this.App.use(cookies());
   }
 
+  private static async setupRequestMiddleware(): Promise<void> {
+    this.App.use((req: Request, res: Response, next: NextFunction) => {
+      req.entity ??= {};
+      next();
+    });
+  }
+
+  private static async initializeRoutes(): Promise<void> {
+    this.App.use("/health", AppHelper.useAppHealthRoute);
+    this.App.use(routes);
+  }
+
   private static async initializeSwaggerDocs(): Promise<void> {
     if (!Config.isProduction()) {
       new SwaggerApp(ExpressApp.App).initialize().catch(Log.error);
@@ -71,7 +79,7 @@ class ExpressApp {
 
   private static async initializeGlobalMiddleware(): Promise<void> {
     this.App.use("*", AppHelper.useAppNotFoundRoute);
-    this.App.use(ApiErrorHelperMiddleware.useGlobalErrorMiddleware);
+    this.App.use(ApiErrorHelperMiddleware.use);
   }
 }
 

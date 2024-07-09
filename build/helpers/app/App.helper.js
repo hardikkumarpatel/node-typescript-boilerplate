@@ -20,7 +20,16 @@ class AppHelper {
       if (error.syscall !== "listen") {
         throw error;
       }
-      throw error;
+      switch (error.code) {
+        case "EACCES":
+          _.Log.info("Requires privileges");
+          return process.exit(1);
+        case "EADDRINUSE":
+          _.Log.error("".concat(_config.Config.get(_config.IConfigKey.PORT), " is already in use"));
+          return process.exit(1);
+        default:
+          throw error;
+      }
     })();
   }
   static serverListening(server) {

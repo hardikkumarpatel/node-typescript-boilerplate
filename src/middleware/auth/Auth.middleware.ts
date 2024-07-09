@@ -1,0 +1,26 @@
+import { IUser } from "@/api/user/User.defination";
+import { ApiAsyncHelper, ApiErrorResponseHelper } from "@/helpers";
+import { getReasonPhrase, StatusCodes } from "http-status-codes";
+
+class ApiAuthHelperMiddleware {
+  public static use = ApiAsyncHelper.AsyncHandler(async (req, res, next): Promise<void> => {
+    const { headers } = req;
+    if (!headers.authorization?.includes("Bearer")) {
+      throw new ApiErrorResponseHelper<string>(
+        StatusCodes.UNAUTHORIZED,
+        "Unauthorised request! access token is missing",
+        getReasonPhrase(StatusCodes.UNAUTHORIZED)
+      );
+    }
+
+    const user: IUser = {
+      id: 1,
+      name: "Hardy",
+      email: "info@mail.com"
+    };
+    req.entity.user = user;
+    next();
+  });
+}
+
+export default ApiAuthHelperMiddleware;

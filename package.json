@@ -19,7 +19,7 @@
     "lint": "npx eslint .",
     "lint:fix": "DEBUG=eslint:* npx eslint --fix .",
     "prepare": "husky || true",
-    "postinstall": "npx husky install",
+    "postinstall": "npx husky init",
     "commitlint": "commitlint --edit"
   },
   "husky": {
@@ -30,7 +30,7 @@
   "lint-staged": {
     "**/*": [
       "prettier --write --ignore-unknown",
-      "npx eslint src/**/*.ts"
+      "npx eslint ."
     ]
   },
   "keywords": [],
