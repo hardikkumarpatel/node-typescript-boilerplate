@@ -5,11 +5,11 @@ export default class ApiErrorResponseHelper<T> extends Error {
   public statusCode: number;
   public message: string;
   public data: null;
-  public error: T | null;
+  public error: T;
   constructor(
     statusCode = 500,
     message = getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
-    error: T | null = null,
+    error: T,
     stack: string | null = null
   ) {
     super(message);

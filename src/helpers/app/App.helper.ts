@@ -17,7 +17,7 @@ class AppHelper {
         return process.exit(1);
 
       case "EADDRINUSE":
-        Log.error(`${Config.get(IConfigKey.PORT)} is already in use`);
+        Log.error(`${Config.get<number>(IConfigKey.PORT)} is already in use`);
         return process.exit(1);
 
       default:
@@ -47,13 +47,13 @@ class AppHelper {
       .on("SIGHUP", () => {
         process.kill(process.pid, "SIGTERM");
       })
-      .on("uncaughtException", (error: Error) => {
-        Log.error(`Uncaught Exception thrown`, error);
+      .on("uncaughtException", (UncaughtError: Error) => {
+        Log.error(`Uncaught Exception thrown`, UncaughtError);
         HTTP.close();
         process.exit(1);
       })
-      .on("unhandledRejection", (reason: Error) => {
-        Log.error(`Unhandled Rejection thrown`, reason);
+      .on("unhandledRejection", (UncaughtReason: Error) => {
+        Log.error(`Unhandled Rejection thrown`, UncaughtReason);
         HTTP.close();
         process.exit(1);
       });

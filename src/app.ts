@@ -6,7 +6,7 @@ import helmet from "helmet";
 import cookies from "cookie-parser";
 import HTTP from "node:http";
 import path from "node:path";
-import { Log, AppHelper } from "@/helpers";
+import { Log, AppHelper, SocketAppHelper } from "@/helpers";
 import { SwaggerApp } from "@/swagger";
 import { Config, IConfigKey } from "@/config";
 import { ApiErrorHelperMiddleware } from "@/middleware";
@@ -17,8 +17,9 @@ class ExpressApp {
   public static HTTPServer: HTTP.Server;
 
   public static async run(): Promise<void> {
-    ExpressApp.startEngine().catch(Log.error);
-    AppHelper.processEventsListening(ExpressApp.HTTPServer);
+    ExpressApp.startEngine()
+      .then(() => AppHelper.processEventsListening(ExpressApp.HTTPServer))
+      .catch(Log.error);
   }
 
   public static async startEngine(): Promise<void> {
@@ -34,6 +35,8 @@ class ExpressApp {
   }
 
   private static async initialize(): Promise<void> {
+    new SocketAppHelper(ExpressApp.HTTPServer);
+    ExpressApp.App.set("IO", SocketAppHelper.IO);
     ExpressApp.initializeMiddleware();
     ExpressApp.setupRequestMiddleware();
     ExpressApp.initializeRoutes();

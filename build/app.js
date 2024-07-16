@@ -23,8 +23,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 class ExpressApp {
   static run() {
     return _asyncToGenerator(function* () {
-      ExpressApp.startEngine().catch(_helpers.Log.error);
-      _helpers.AppHelper.processEventsListening(ExpressApp.HTTPServer);
+      ExpressApp.startEngine().then(() => _helpers.AppHelper.processEventsListening(ExpressApp.HTTPServer)).catch(_helpers.Log.error);
     })();
   }
   static startEngine() {
@@ -41,6 +40,8 @@ class ExpressApp {
   }
   static initialize() {
     return _asyncToGenerator(function* () {
+      new _helpers.SocketEngineApp(ExpressApp.HTTPServer);
+      ExpressApp.App.set("IO", _helpers.SocketEngineApp.IO);
       ExpressApp.initializeMiddleware();
       ExpressApp.setupRequestMiddleware();
       ExpressApp.initializeRoutes();

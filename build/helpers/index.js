@@ -33,10 +33,17 @@ Object.defineProperty(exports, "Log", {
     return _Logger.default;
   }
 });
+Object.defineProperty(exports, "SocketEngineApp", {
+  enumerable: true,
+  get: function get() {
+    return _Socket.default;
+  }
+});
 var _Logger = _interopRequireDefault(require("./log/Logger.helper"));
 var _App = _interopRequireDefault(require("./app/App.helper"));
 var _ApiErrorResponse = _interopRequireDefault(require("./api/ApiErrorResponse.helper"));
 var _ApiResponse = _interopRequireDefault(require("./api/ApiResponse.helper"));
 var _ApiAsync = _interopRequireDefault(require("./api/ApiAsync.helper"));
+var _Socket = _interopRequireDefault(require("./socket/Socket.engine"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 //# sourceMappingURL=index.js.map

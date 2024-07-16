@@ -52,12 +52,12 @@ class AppHelper {
       }
     }).on("SIGHUP", () => {
       process.kill(process.pid, "SIGTERM");
-    }).on("uncaughtException", error => {
-      _.Log.error("Uncaught Exception thrown", error);
+    }).on("uncaughtException", UncaughtError => {
+      _.Log.error("Uncaught Exception thrown", UncaughtError);
       HTTP.close();
       process.exit(1);
-    }).on("unhandledRejection", reason => {
-      _.Log.error("Unhandled Rejection thrown", reason);
+    }).on("unhandledRejection", UncaughtReason => {
+      _.Log.error("Unhandled Rejection thrown", UncaughtReason);
       HTTP.close();
       process.exit(1);
     });
