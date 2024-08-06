@@ -5,9 +5,7 @@ import { glob } from "glob";
 
 export type Options = swaggerJSDocs.Options;
 const PORT = Config.get<number>(IConfigKey.PORT);
-const API_FILES_PATH = glob.sync("**/api/**/*.swagger.yaml");
-// glob.sync(path.resolve(path.join(__dirname), '..', '**/api/**/*.swagger.json'));
-
+const API_FILES_PATH = glob.sync("**/api/rest/**/*.swagger.yaml");
 class SwaggerOptions {
   public static readonly SWAGGER_OPTIONS: Options = {
     definition: {
@@ -15,7 +13,7 @@ class SwaggerOptions {
       host: "",
       basePath: "",
       info: {
-        title: "TRIDHYA NODE BOILERPLATE ENGINE",
+        title: "TRIDHYA NODE REST API BOILERPLATE ENGINE",
         version,
         description: "Swagger API Documentation for Node Boilerplate Engine",
         license: {

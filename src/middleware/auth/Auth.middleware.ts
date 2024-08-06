@@ -1,4 +1,4 @@
-import { IUser } from "@/api/user/User.defination";
+import { IUser } from "@/api/rest/User/User.defination";
 import { ApiAsyncHelper, ApiErrorResponseHelper } from "@/helpers";
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 

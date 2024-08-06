@@ -11,9 +11,7 @@ function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var PORT = _config.Config.get(_config.IConfigKey.PORT);
-var API_FILES_PATH = _glob.glob.sync("**/api/**/*.swagger.yaml");
-// glob.sync(path.resolve(path.join(__dirname), '..', '**/api/**/*.swagger.json'));
-
+var API_FILES_PATH = _glob.glob.sync("**/api/rest/**/*.swagger.yaml");
 class SwaggerOptions {}
 _defineProperty(SwaggerOptions, "SWAGGER_OPTIONS", {
   definition: {
@@ -21,7 +19,7 @@ _defineProperty(SwaggerOptions, "SWAGGER_OPTIONS", {
     host: "",
     basePath: "",
     info: {
-      title: "TRIDHYA NODE BOILERPLATE ENGINE",
+      title: "TRIDHYA NODE REST API BOILERPLATE ENGINE",
       version: _package.version,
       description: "Swagger API Documentation for Node Boilerplate Engine",
       license: {

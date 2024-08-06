@@ -16,6 +16,7 @@ class LoggerHelper {
             error: "red",
             info: "green",
             debug: "green",
+            warn: "yellow",
             http: "blue"
           }
         }),
@@ -47,7 +48,7 @@ class LoggerHelper {
   }
 
   public static info(message: string): void;
-  public static info<T>(message: string, metadata: T): void;
+  public static info<T>(message: string, metadata?: T): void;
   public static info<T>(message: string, metadata?: T) {
     LoggerHelper.print().info(message, { metadata });
   }
@@ -62,6 +63,12 @@ class LoggerHelper {
   public static error<T>(message: string, metadata?: T): void;
   public static error<T>(message: string, metadata?: T) {
     LoggerHelper.print().error(message, { metadata });
+  }
+
+  public static warn(message: string): void;
+  public static warn<T>(message: string, metadata?: T): void;
+  public static warn<T>(message: string, metadata?: T) {
+    LoggerHelper.print().warn(message, { metadata });
   }
 
   public static http(message: string): void;

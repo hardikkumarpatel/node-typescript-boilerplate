@@ -9,6 +9,6 @@ Object.defineProperty(exports, "UserController", {
     return _User.default;
   }
 });
-var _User = _interopRequireDefault(require("./user/User.controller"));
+var _User = _interopRequireDefault(require("./User/User.controller"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 //# sourceMappingURL=index.js.map

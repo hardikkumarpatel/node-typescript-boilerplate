@@ -10,45 +10,46 @@ import { Log, AppHelper, SocketAppHelper } from "@/helpers";
 import { SwaggerApp } from "@/swagger";
 import { Config, IConfigKey } from "@/config";
 import { ApiErrorHelperMiddleware } from "@/middleware";
+import GraphQLServer from "@/api/graphql/Graphql.server";
 import routes from "@/routes";
 
 class ExpressApp {
   public static App: express.Application;
-  public static HTTPServer: HTTP.Server;
+  public static HttpServer: HTTP.Server;
 
   public static async run(): Promise<void> {
-    ExpressApp.startEngine()
-      .then(() => AppHelper.processEventsListening(ExpressApp.HTTPServer))
-      .catch(Log.error);
+    ExpressApp.startEngine().then(AppHelper.signalListening).catch(Log.error);
   }
 
-  public static async startEngine(): Promise<void> {
+  public static async startEngine(): Promise<express.Application> {
     ExpressApp.App = express();
-    ExpressApp.HTTPServer = HTTP.createServer(this.App);
+    ExpressApp.HttpServer = HTTP.createServer(ExpressApp.App);
+    ExpressApp.App.set("HttpServer", ExpressApp.HttpServer);
     ExpressApp.App.set("port", Config.get<number>(IConfigKey.PORT));
-    ExpressApp.HTTPServer.on("error", AppHelper.serverErrorListening);
-    ExpressApp.HTTPServer.on("close", Log.info);
-    ExpressApp.HTTPServer.on("listening", () =>
-      AppHelper.serverListening(ExpressApp.HTTPServer).then(ExpressApp.initialize)
+    ExpressApp.HttpServer.on("error", AppHelper.serverErrorListening);
+    ExpressApp.HttpServer.on("close", Log.info);
+    ExpressApp.HttpServer.on("listening", () =>
+      AppHelper.listening(ExpressApp.HttpServer).then(ExpressApp.initialize)
     );
-    ExpressApp.HTTPServer.listen(Config.get<number>(IConfigKey.PORT));
+    ExpressApp.HttpServer.listen(Config.get<number>(IConfigKey.PORT));
+    return ExpressApp.App;
   }
 
   private static async initialize(): Promise<void> {
-    new SocketAppHelper(ExpressApp.HTTPServer);
-    ExpressApp.App.set("IO", SocketAppHelper.IO);
-    ExpressApp.initializeMiddleware();
-    ExpressApp.setupRequestMiddleware();
-    ExpressApp.initializeRoutes();
-    ExpressApp.initializeSwaggerDocs();
-    ExpressApp.initializeGlobalMiddleware();
+    await ExpressApp.initializeMiddleware();
+    await ExpressApp.setupRequestMiddleware();
+    await ExpressApp.initializeRoutes();
+    await ExpressApp.initializeSwaggerDocs();
+    await ExpressApp.initializeSocket();
+    await ExpressApp.initializeGraphQLServer();
+    await ExpressApp.initializeGlobalMiddleware();
   }
 
   private static async initializeMiddleware(): Promise<void> {
     this.App.use(express.urlencoded({ limit: "6kb", extended: true }));
     this.App.use(express.json({ limit: "6kb" }));
     this.App.use(morgan("combined", { stream: { write: Log.http } }));
-    this.App.use("/public", express.static(path.resolve(path.join(__dirname), "src", "public")));
+    this.App.use("/public", express.static(path.resolve(path.join(__dirname, "public"))));
     this.App.use(
       cors({
         origin: "*",
@@ -72,12 +73,20 @@ class ExpressApp {
   }
 
   private static async initializeSwaggerDocs(): Promise<void> {
-    if (!Config.isProduction()) {
-      new SwaggerApp(ExpressApp.App).initialize().catch(Log.error);
-      Log.info(
-        `Swagger docs available at http://localhost:${Config.get<number>(IConfigKey.PORT)} 📗`
-      );
-    }
+    const swaggerApp = new SwaggerApp(ExpressApp.App);
+    await swaggerApp.initialize().then(Log.info).catch(Log.error);
+  }
+
+  private static async initializeSocket(): Promise<void> {
+    const socket = new SocketAppHelper(ExpressApp.HttpServer);
+    await socket.initialize();
+    (global as any).IO = socket.IO;
+    ExpressApp.App.set("IO", socket.IO);
+  }
+
+  private static async initializeGraphQLServer(): Promise<void> {
+    const graphQL = new GraphQLServer(ExpressApp.App);
+    await graphQL.initialize(ExpressApp.HttpServer).then(Log.info).catch(Log.error);
   }
 
   private static async initializeGlobalMiddleware(): Promise<void> {

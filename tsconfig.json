@@ -11,11 +11,12 @@
     "sourceMap": true,
     "outDir": "build",
     "esModuleInterop": true,
+    "moduleResolution": "Node",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "pretty": true,
-    "noEmit": true,
+    "noEmit": false,
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["src/*"]

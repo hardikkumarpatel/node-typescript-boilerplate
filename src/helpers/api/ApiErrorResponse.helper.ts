@@ -25,3 +25,15 @@ export default class ApiErrorResponseHelper<T> extends Error {
     }
   }
 }
+
+interface Extension {
+  code?: string;
+  stacktrace?: ReadonlyArray<string>;
+}
+export class ErrorCapture {
+  public message: string;
+  public extensions: Extension | undefined;
+  constructor(message: string, extensions?: Extension) {
+    (this.message = message), (this.extensions = extensions);
+  }
+}

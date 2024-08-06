@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ApiAsyncHelper, ApiResponseHelper } from "@/helpers";
-import UserService from "@/api/user/User.service";
-import { IUser } from "@/api/user/User.defination";
+import UserService from "@/api/rest/User/User.service";
+import { IUser } from "@/api/rest/User/User.defination";
 
 class UserController {
   public static getUsers = ApiAsyncHelper.AsyncHandler(

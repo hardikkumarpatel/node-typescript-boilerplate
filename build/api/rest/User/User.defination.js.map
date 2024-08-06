@@ -1,0 +1,1 @@
+{"version":3,"file":"User.defination.js","names":[],"sources":["../../../../src/api/rest/User/User.defination.ts"],"sourcesContent":["export type IUser = {\n  id: number;\n  name: string;\n  email: string;\n};\n"],"mappings":"","ignoreList":[]}

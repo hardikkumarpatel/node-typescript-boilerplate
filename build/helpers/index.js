@@ -33,7 +33,7 @@ Object.defineProperty(exports, "Log", {
     return _Logger.default;
   }
 });
-Object.defineProperty(exports, "SocketEngineApp", {
+Object.defineProperty(exports, "SocketAppHelper", {
   enumerable: true,
   get: function get() {
     return _Socket.default;

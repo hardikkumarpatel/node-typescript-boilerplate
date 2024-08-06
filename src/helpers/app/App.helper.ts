@@ -1,9 +1,11 @@
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
 import StatusCodes, { getReasonPhrase } from "http-status-codes";
 import HTTP from "node:http";
 import { AddressInfo } from "node:net";
 import { ApiErrorResponseHelper, ApiResponseHelper, Log } from "@/helpers";
 import { Config, IConfigKey } from "@/config";
+import { ApolloServer } from "@apollo/server";
+import { Server } from "socket.io";
 
 class AppHelper {
   public static async serverErrorListening(error: NodeJS.ErrnoException): Promise<void> {
@@ -25,22 +27,25 @@ class AppHelper {
     }
   }
 
-  public static async serverListening(server: HTTP.Server): Promise<void> {
+  public static async listening(server: HTTP.Server): Promise<void> {
     const address: AddressInfo = <AddressInfo>server.address();
     Log.info(`Express engine is running on ${address.port} 🚀`);
   }
 
-  public static processEventsListening(HTTP: HTTP.Server): void {
+  public static signalListening(app: express.Application): void {
+    const http: HTTP.Server = app.get("HttpServer");
     process
-      .on("SIGINT", () => {
+      .on("SIGINT", async () => {
         try {
-          HTTP.close();
+          http.close();
         } catch (SIGINTError: unknown) {
           if (SIGINTError instanceof Error) {
             Log.error(`Error occurred during shutdown server`, SIGINTError);
           }
         } finally {
-          Log.info(`Express engine shutdown successfully 🌱`);
+          ((global as any).GraphQL as ApolloServer)?.stop();
+          ((global as any).IO as Server)?.close();
+          Log.http(`Express engine and all running instance are shutdown successfully 🌱`);
           process.exit(1);
         }
       })
@@ -49,12 +54,13 @@ class AppHelper {
       })
       .on("uncaughtException", (UncaughtError: Error) => {
         Log.error(`Uncaught Exception thrown`, UncaughtError);
-        HTTP.close();
+        http.close();
+        ((global as any).GraphQL as ApolloServer)?.stop();
+        ((global as any).IO as Server)?.close();
         process.exit(1);
       })
       .on("unhandledRejection", (UncaughtReason: Error) => {
         Log.error(`Unhandled Rejection thrown`, UncaughtReason);
-        HTTP.close();
         process.exit(1);
       });
   }
@@ -74,7 +80,11 @@ class AppHelper {
     );
   };
 
-  public static useAppNotFoundRoute = (): void => {
+  public static useAppNotFoundRoute = (req: Request): void => {
+    console.log("RR", req.method);
+    console.log("RR", req.baseUrl);
+    console.log("RR", req.originalUrl);
+    console.log("RR", req.url);
     throw new ApiErrorResponseHelper<string>(
       StatusCodes.NOT_FOUND,
       "Request resource not found",

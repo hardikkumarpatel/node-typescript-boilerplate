@@ -1,4 +1,4 @@
-import { IUser } from "@/api/user/User.defination";
+import { IUser } from "@/api/rest/User/User.defination";
 
 class UserService {
   public static async getUsersDetails(): Promise<IUser[]> {

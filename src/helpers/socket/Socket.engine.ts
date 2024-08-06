@@ -4,21 +4,21 @@ import { DisconnectReason, Server, Socket } from "socket.io";
 import { Log } from "@/helpers";
 
 class SocketAppHelper {
-  public static IO: Server;
+  public IO: Server;
   constructor(http: HTTP.Server) {
-    SocketAppHelper.IO = new Server(http, {
+    this.IO = new Server(http, {
       cors: {
         origin: "*"
       },
       connectionStateRecovery: {},
       allowEIO3: true
     });
-    SocketAppHelper.intiSocket();
+    (global as any).IO = this.IO;
   }
 
-  public static async intiSocket(): Promise<void> {
+  public async initialize(): Promise<void> {
     Log.info(`Socket engine connected and initialized 🚀`);
-    SocketAppHelper.IO.on("connection", async (socket: Socket) => {
+    this.IO.on("connection", async (socket: Socket) => {
       try {
         Log.info(`Socket is connected ${socket.id}`);
 

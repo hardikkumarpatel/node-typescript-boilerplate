@@ -41,6 +41,7 @@ class SwaggerApp {
           return _ref.apply(this, arguments);
         };
       }()));
+      return "Swagger docs available at http://localhost:".concat(_config.Config.get(_config.IConfigKey.PORT), "/docs \uD83D\uDCD7");
     })();
   }
 }

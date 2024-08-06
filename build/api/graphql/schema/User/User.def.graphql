@@ -1,0 +1,17 @@
+type Query {
+  getUsers: IUser
+}
+
+type Mutation {
+  updateUsers(user: UserRequest): IUser
+}
+
+input UserRequest {
+  id: Int!
+  name: String!
+}
+
+type IUser {
+  id: Int!
+  name: String!
+}

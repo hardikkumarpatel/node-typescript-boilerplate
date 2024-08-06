@@ -12,12 +12,12 @@
     "build": "npm run clean && babel src --out-dir build --extensions '.ts' --source-maps --copy-files",
     "start:dev": "npm run build && cross-env NODE_ENV=development nodemon --config nodemon.common.json --exec node build/server.js",
     "start:stage": "npm run build && cross-env NODE_ENV=staging nodemon --config nodemon.common.json --exec node build/server.js",
-    "start:prod": "npm run build && cross-env  NODE_ENV=production nodemon --config nodemon.common.json --exec node build/server.js",
+    "start:prod": "npm run build && cross-env NODE_ENV=production nodemon --config nodemon.common.json --exec node build/server.js",
     "compile": "tsc -b",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "lint": "npx eslint .",
-    "lint:fix": "DEBUG=eslint:* npx eslint --fix .",
+    "lint": "npx eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "DEBUG=eslint:* npx eslint --fix 'src/**/*.{ts,tsx}'",
     "prepare": "husky || true",
     "commitlint": "commitlint --edit"
   },
@@ -27,14 +27,15 @@
     }
   },
   "lint-staged": {
-    "**/*": [
+    "src/**/*": [
       "prettier --write --ignore-unknown",
-      "npx eslint ."
+      "npx eslint 'src/**/*.{ts,tsx}'"
     ]
   },
   "keywords": [],
   "license": "ISC",
   "dependencies": {
+    "@apollo/server": "4.10.5",
     "cookie-parser": "1.4.6",
     "cors": "2.8.5",
     "dotenv": "16.4.5",
@@ -42,6 +43,7 @@
     "express-basic-auth": "1.2.1",
     "express-promise-wrap": "0.2.2",
     "glob": "10.4.3",
+    "graphql": "16.9.0",
     "helmet": "7.1.0",
     "http-status-code": "2.1.0",
     "http-status-codes": "2.3.0",

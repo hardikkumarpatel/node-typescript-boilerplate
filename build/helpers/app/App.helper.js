@@ -32,33 +32,39 @@ class AppHelper {
       }
     })();
   }
-  static serverListening(server) {
+  static listening(server) {
     return _asyncToGenerator(function* () {
       var address = server.address();
       _.Log.info("Express engine is running on ".concat(address.port, " \uD83D\uDE80"));
     })();
   }
-  static processEventsListening(HTTP) {
-    process.on("SIGINT", () => {
+  static signalListening(app) {
+    var http = app.get("HttpServer");
+    process.on("SIGINT", /*#__PURE__*/_asyncToGenerator(function* () {
       try {
-        HTTP.close();
+        http.close();
       } catch (SIGINTError) {
         if (SIGINTError instanceof Error) {
           _.Log.error("Error occurred during shutdown server", SIGINTError);
         }
       } finally {
-        _.Log.info("Express engine shutdown successfully \uD83C\uDF31");
+        var _GraphQL, _IO;
+        (_GraphQL = global.GraphQL) === null || _GraphQL === void 0 || _GraphQL.stop();
+        (_IO = global.IO) === null || _IO === void 0 || _IO.close();
+        _.Log.http("Express engine and all running instance are shutdown successfully \uD83C\uDF31");
         process.exit(1);
       }
-    }).on("SIGHUP", () => {
+    })).on("SIGHUP", () => {
       process.kill(process.pid, "SIGTERM");
     }).on("uncaughtException", UncaughtError => {
+      var _GraphQL2, _IO2;
       _.Log.error("Uncaught Exception thrown", UncaughtError);
-      HTTP.close();
+      http.close();
+      (_GraphQL2 = global.GraphQL) === null || _GraphQL2 === void 0 || _GraphQL2.stop();
+      (_IO2 = global.IO) === null || _IO2 === void 0 || _IO2.close();
       process.exit(1);
     }).on("unhandledRejection", UncaughtReason => {
       _.Log.error("Unhandled Rejection thrown", UncaughtReason);
-      HTTP.close();
       process.exit(1);
     });
   }
@@ -74,7 +80,11 @@ _defineProperty(AppHelper, "useAppHealthRoute", (req, res) => {
     pid: pid
   }));
 });
-_defineProperty(AppHelper, "useAppNotFoundRoute", () => {
+_defineProperty(AppHelper, "useAppNotFoundRoute", req => {
+  console.log("RR", req.method);
+  console.log("RR", req.baseUrl);
+  console.log("RR", req.originalUrl);
+  console.log("RR", req.url);
   throw new _.ApiErrorResponseHelper(_httpStatusCodes.default.NOT_FOUND, "Request resource not found", (0, _httpStatusCodes.getReasonPhrase)(_httpStatusCodes.default.NOT_FOUND));
 });
 var _default = exports.default = AppHelper;

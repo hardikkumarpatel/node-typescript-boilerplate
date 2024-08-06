@@ -21,6 +21,7 @@ class LoggerHelper {
           error: "red",
           info: "green",
           debug: "green",
+          warn: "yellow",
           http: "blue"
         }
       }), winston.format.timestamp({
@@ -64,6 +65,11 @@ class LoggerHelper {
   }
   static error(message, metadata) {
     LoggerHelper.print().error(message, {
+      metadata
+    });
+  }
+  static warn(message, metadata) {
+    LoggerHelper.print().warn(message, {
       metadata
     });
   }

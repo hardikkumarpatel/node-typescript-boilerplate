@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UserController } from "@/api";
+import { UserController } from "@/api/rest";
 import { ApiAuthHelperMiddleware } from "@/middleware";
 const UserRoutes = Router();
 

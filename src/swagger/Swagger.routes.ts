@@ -7,12 +7,12 @@ import { Config, IConfigKey } from "@/config";
 import { SwaggerOptions } from "@/swagger";
 
 class SwaggerApp {
-  public app: express.Application;
+  private app: express.Application;
   constructor(app: express.Application) {
     this.app = app;
   }
 
-  public async initialize(): Promise<void> {
+  public async initialize(): Promise<string> {
     this.app.use(
       "/docs",
       basicAuth({
@@ -39,6 +39,7 @@ class SwaggerApp {
         res.send(swaggerJSDocs(SwaggerOptions.SWAGGER_OPTIONS));
       })
     );
+    return `Swagger docs available at http://localhost:${Config.get<number>(IConfigKey.PORT)}/docs 📗`;
   }
 }
 
