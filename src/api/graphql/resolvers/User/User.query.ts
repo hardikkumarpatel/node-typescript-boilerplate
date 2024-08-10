@@ -13,6 +13,7 @@ class UserQueryResolver {
     };
   }
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   private async getUsers(
     parent: unknown,
     args: Record<string, unknown>,

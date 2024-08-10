@@ -1,5 +1,5 @@
-import { IUser } from "@/api/rest/User/User.defination";
 import { ApiAsyncHelper, ApiErrorResponseHelper } from "@/helpers";
+import { IUser } from "@/helpers/interfaces/User.definations";
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 
 class ApiAuthHelperMiddleware {
@@ -14,7 +14,6 @@ class ApiAuthHelperMiddleware {
     }
 
     const user: IUser = {
-      id: 1,
       name: "Hardy",
       email: "info@mail.com"
     };

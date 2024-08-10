@@ -6,6 +6,7 @@ import { ApiErrorResponseHelper, ApiResponseHelper, Log } from "@/helpers";
 import { Config, IConfigKey } from "@/config";
 import { ApolloServer } from "@apollo/server";
 import { Server } from "socket.io";
+import mongoose from "mongoose";
 
 class AppHelper {
   public static async serverErrorListening(error: NodeJS.ErrnoException): Promise<void> {
@@ -45,6 +46,7 @@ class AppHelper {
         } finally {
           ((global as any).GraphQL as ApolloServer)?.stop();
           ((global as any).IO as Server)?.close();
+          ((global as any).MongoDB as typeof mongoose)?.disconnect();
           Log.http(`Express engine and all running instance are shutdown successfully 🌱`);
           process.exit(1);
         }
@@ -57,6 +59,7 @@ class AppHelper {
         http.close();
         ((global as any).GraphQL as ApolloServer)?.stop();
         ((global as any).IO as Server)?.close();
+        ((global as any).MongoDB as typeof mongoose)?.disconnect();
         process.exit(1);
       })
       .on("unhandledRejection", (UncaughtReason: Error) => {
@@ -80,11 +83,7 @@ class AppHelper {
     );
   };
 
-  public static useAppNotFoundRoute = (req: Request): void => {
-    console.log("RR", req.method);
-    console.log("RR", req.baseUrl);
-    console.log("RR", req.originalUrl);
-    console.log("RR", req.url);
+  public static useAppNotFoundRoute = (): void => {
     throw new ApiErrorResponseHelper<string>(
       StatusCodes.NOT_FOUND,
       "Request resource not found",

@@ -40,6 +40,13 @@ export default [
     }
   },
   {
-    ignores: ["src/typings/*", "**/build/**", "**/dist/**", "**/node_modules/", ".git/", "src/api/graphql/schema/**/*.graphql"]
+    ignores: [
+      "src/typings/*",
+      "**/build/**",
+      "**/dist/**",
+      "**/node_modules/",
+      ".git/",
+      "src/api/graphql/schema/**/*.graphql"
+    ]
   }
 ];

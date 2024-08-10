@@ -4,11 +4,12 @@ import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 export default class ApiErrorHelperMiddleware {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   public static use = <T = string>(
     err: ApiErrorResponseHelper<T>,
-    _: Request,
+    req: Request,
     res: Response,
-    __: NextFunction
+    next: NextFunction
   ) => {
     const { message, name, error, stack } = err;
     let { statusCode } = err;

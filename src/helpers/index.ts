@@ -4,6 +4,8 @@ import ApiErrorResponseHelper from "./api/ApiErrorResponse.helper";
 import ApiResponseHelper from "./api/ApiResponse.helper";
 import ApiAsyncHelper from "./api/ApiAsync.helper";
 import SocketAppHelper from "./socket/Socket.engine";
+import RoleHelper from "./role/Role.helper";
+import PermissionsHelper from "./role/Permissions.helper";
 
 export {
   LoggerHelper as Log,
@@ -11,5 +13,7 @@ export {
   ApiErrorResponseHelper,
   ApiResponseHelper,
   ApiAsyncHelper,
-  SocketAppHelper
+  SocketAppHelper,
+  RoleHelper,
+  PermissionsHelper
 };

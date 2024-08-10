@@ -12,6 +12,7 @@ import { Config, IConfigKey } from "@/config";
 import { ApiErrorHelperMiddleware } from "@/middleware";
 import GraphQLServer from "@/api/graphql/Graphql.server";
 import routes from "@/routes";
+import MongoDBConnection from "./database/mongodb/connection/Mongo.connection";
 
 class ExpressApp {
   public static App: express.Application;
@@ -28,14 +29,16 @@ class ExpressApp {
     ExpressApp.App.set("port", Config.get<number>(IConfigKey.PORT));
     ExpressApp.HttpServer.on("error", AppHelper.serverErrorListening);
     ExpressApp.HttpServer.on("close", Log.info);
-    ExpressApp.HttpServer.on("listening", () =>
-      AppHelper.listening(ExpressApp.HttpServer).then(ExpressApp.initialize)
+    ExpressApp.HttpServer.on(
+      "listening",
+      async () => await AppHelper.listening(ExpressApp.HttpServer).then(ExpressApp.initialize)
     );
     ExpressApp.HttpServer.listen(Config.get<number>(IConfigKey.PORT));
     return ExpressApp.App;
   }
 
   private static async initialize(): Promise<void> {
+    // await MongoDBConnection.connect();
     await ExpressApp.initializeMiddleware();
     await ExpressApp.setupRequestMiddleware();
     await ExpressApp.initializeRoutes();
